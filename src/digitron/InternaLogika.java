@@ -31,6 +31,7 @@ public class InternaLogika
 	static Stack<String> operacije = new Stack<String>();
 	static int broj;
 	static double izaTacke;
+	static int brojacNuli;
 	static boolean imamoOstatak;
 	static double zadnjiClan; 
 
@@ -41,10 +42,20 @@ public class InternaLogika
 			broj = Integer.parseInt(String.valueOf(unos)); 
 
 			if (imamoOstatak)
-			{
-				izaTacke = izaTacke*10 + broj;
-				System.out.println("Iza tacke treba: " + izaTacke);
-				System.out.println("Na stacku je: " + InternaLogika.unos.peek());
+			{ 
+				if (izaTacke == 0 && broj == 0)
+				{
+					brojacNuli++;  //1
+				} else
+				{
+					if (brojacNuli == 0)
+					{
+						izaTacke = izaTacke*10 + broj;
+					} else
+					{
+						izaTacke = izaTacke*100 + broj;
+					}
+				}
 			} else
 			{
 				if (InternaLogika.unos.isEmpty()) 
@@ -57,8 +68,13 @@ public class InternaLogika
 			}
 			if (imamoOstatak)
 			{
+				String nule = "";
+				for (int i = 0; i < brojacNuli - 1; i++)
+				{
+					nule += "0";
+				}
 				return ukloniNule(String.valueOf((InternaLogika.unos.peek().intValue())
-						        + "." + String.valueOf((int)izaTacke)));
+						+ "." + nule + String.valueOf((int)izaTacke)));
 			} else
 			{
 				return ukloniNule(String.valueOf(InternaLogika.unos.peek()));
@@ -66,7 +82,7 @@ public class InternaLogika
 		} catch (NumberFormatException e)
 		{
 			String izlaz = "0";
-			
+
 			if (unos == '.')
 			{
 				if (InternaLogika.unos.isEmpty())
@@ -130,10 +146,10 @@ public class InternaLogika
 	{
 		if (String.valueOf(broj).length() <= 9)
 		{
-			return broj / Math.pow(10, String.valueOf(izaTacke).length() - 2);
+			return broj / Math.pow(10, String.valueOf(izaTacke).length() - 2 + brojacNuli);
 		} else
 		{ 
-			return broj / Math.pow(10, String.valueOf(izaTacke).length() - 3);
+			return broj / Math.pow(10, String.valueOf(izaTacke).length() - 3 + brojacNuli);
 		}
 	}
 	public static void izvrsiOperaciju(String op)
@@ -159,21 +175,23 @@ public class InternaLogika
 	}
 	public static String ukloniNule(String broj)
 	{
-		if (!imamoOstatak)
+		while (broj.contains("."))
 		{
-			while (broj.contains("."))
+			if ( imamoOstatak && brojacNuli > 0 && broj.endsWith("0"))
 			{
-				if (broj.endsWith("0"))
-				{
-
-					broj = broj.substring(0, broj.length()-2); 
-				}else if (broj.endsWith("."))
-				{
-					broj = broj.substring(0, broj.length()-2);
-				} else
-				{
-					return broj;
-				}
+				return broj;
+			} else if (broj.endsWith("0"))
+			{
+				broj = broj.substring(0, broj.length()-2);
+			}else if (broj.endsWith(".0") && brojacNuli == 0)
+			{
+				broj = broj.substring(0, broj.length()-3);
+			} else if (broj.endsWith("."))
+			{
+				broj = broj.substring(0, broj.length()-2);
+			} else
+			{
+				return broj;
 			}
 		}
 		return broj;
@@ -186,10 +204,11 @@ public class InternaLogika
 		{
 			InternaLogika.imamoOstatak = false;
 			InternaLogika.izaTacke = 0;
+			InternaLogika.brojacNuli = 0;
 			if (sve)
 			{
 				InternaLogika.unos.clear(); 
-				InternaLogika.operacije.clear();		
+				InternaLogika.operacije.clear();
 			} else
 			{
 				InternaLogika.unos.pop(); 
