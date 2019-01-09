@@ -90,6 +90,7 @@ public class InternaLogika
 						}
 						InternaLogika.izvrsiOperaciju(InternaLogika.operacije.peek());
 						izlaz = String.valueOf(InternaLogika.unos.peek());
+						
 					}
 				}else
 				{
@@ -112,9 +113,11 @@ public class InternaLogika
 						InternaLogika.operacije.remove(indeksOperacije);
 						izlaz = String.valueOf(InternaLogika.unos.peek());
 					}
-					InternaLogika.unos.push((double)0);
+			
 				}
+				InternaLogika.unos.push((double)0);
 			}
+			
 			return ukloniNule(izlaz);
 		}
 	}
