@@ -214,6 +214,13 @@ public class MainWindow {
 		frame.getContentPane().add(btnMr);
 
 		JButton button_tacka = new JButton(".");
+		button_tacka.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				txtEkran.setText(InternaLogika.procesirajUnos('.'));
+			}
+		});
 		button_tacka.setBounds(109, 289, 89, 23);
 		frame.getContentPane().add(button_tacka);
 

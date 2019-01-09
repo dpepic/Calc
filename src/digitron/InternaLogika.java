@@ -25,12 +25,13 @@ import java.util.Stack;
 
  */
 
-
 public class InternaLogika 
 {
 	static Stack<Double> unos = new Stack<Double>();
 	static Stack<String> operacije = new Stack<String>();
 	static int broj;
+	static double izaTacke;
+	static boolean imamoOstatak;
 	static double zadnjiClan; 
 
 	public static String procesirajUnos(char unos)
@@ -39,17 +40,48 @@ public class InternaLogika
 		{
 			broj = Integer.parseInt(String.valueOf(unos)); 
 
-			if (InternaLogika.unos.isEmpty()) 
+			if (imamoOstatak)
 			{
-				InternaLogika.unos.push((double)broj); 
+				izaTacke = izaTacke*10 + broj;
+				System.out.println("Iza tacke treba: " + izaTacke);
+				System.out.println("Na stacku je: " + InternaLogika.unos.peek());
 			} else
 			{
-				InternaLogika.unos.push(InternaLogika.unos.pop()*10 + broj);
+				if (InternaLogika.unos.isEmpty()) 
+				{
+					InternaLogika.unos.push((double)broj);
+				} else
+				{	
+					InternaLogika.unos.push(InternaLogika.unos.pop() * 10 + broj);
+				}
 			}
-			return ukloniNule(String.valueOf(InternaLogika.unos.peek())); 
+			if (imamoOstatak)
+			{
+				return ukloniNule(String.valueOf((InternaLogika.unos.peek().intValue())
+						        + "." + String.valueOf((int)izaTacke)));
+			} else
+			{
+				return ukloniNule(String.valueOf(InternaLogika.unos.peek()));
+			}
 		} catch (NumberFormatException e)
 		{
-			String izlaz = "0"; 
+			String izlaz = "0";
+			
+			if (unos == '.')
+			{
+				if (InternaLogika.unos.isEmpty())
+				{
+					InternaLogika.unos.push(0.0);
+				}
+				imamoOstatak = true;
+				return ukloniNule(String.valueOf(InternaLogika.unos.peek()));
+			} else
+			{
+				imamoOstatak = false;
+				izaTacke = postaviIzaNule(izaTacke);
+				InternaLogika.unos.push(InternaLogika.unos.pop() + izaTacke );
+				izaTacke = 0;
+			}
 			if (!InternaLogika.unos.isEmpty())
 			{
 				if (unos == '=')
@@ -66,7 +98,7 @@ public class InternaLogika
 						InternaLogika.izvrsiOperaciju(InternaLogika.operacije.peek());
 						izlaz = String.valueOf(InternaLogika.unos.peek());
 					}
-				} else
+				}else
 				{
 					InternaLogika.zadnjiClan = 0;
 					InternaLogika.operacije.push(String.valueOf(unos));
@@ -94,6 +126,16 @@ public class InternaLogika
 		}
 	}
 
+	public static double postaviIzaNule(double broj)
+	{
+		if (String.valueOf(broj).length() <= 9)
+		{
+			return broj / Math.pow(10, String.valueOf(izaTacke).length() - 2);
+		} else
+		{ 
+			return broj / Math.pow(10, String.valueOf(izaTacke).length() - 3);
+		}
+	}
 	public static void izvrsiOperaciju(String op)
 	{
 		double drugi;
@@ -117,18 +159,21 @@ public class InternaLogika
 	}
 	public static String ukloniNule(String broj)
 	{
-		while (broj.contains("."))
+		if (!imamoOstatak)
 		{
-			if (broj.endsWith("0"))
+			while (broj.contains("."))
 			{
+				if (broj.endsWith("0"))
+				{
 
-				broj = broj.substring(0, broj.length()-2); 
-			}else if (broj.endsWith("."))
-			{
-				broj = broj.substring(0, broj.length()-2);
-			} else
-			{
-				return broj;
+					broj = broj.substring(0, broj.length()-2); 
+				}else if (broj.endsWith("."))
+				{
+					broj = broj.substring(0, broj.length()-2);
+				} else
+				{
+					return broj;
+				}
 			}
 		}
 		return broj;
@@ -139,10 +184,12 @@ public class InternaLogika
 	{
 		if (!InternaLogika.unos.isEmpty())
 		{
+			InternaLogika.imamoOstatak = false;
+			InternaLogika.izaTacke = 0;
 			if (sve)
 			{
 				InternaLogika.unos.clear(); 
-				InternaLogika.operacije.clear();
+				InternaLogika.operacije.clear();		
 			} else
 			{
 				InternaLogika.unos.pop(); 
