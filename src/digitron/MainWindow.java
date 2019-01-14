@@ -19,6 +19,8 @@ public class MainWindow {
 
 	private JFrame frame;
 	private JTextField txtEkran;
+	private JButton button_zZagrada;
+	private JButton button_oZagrada;
 
 	/**
 	 * Launch the application.
@@ -175,6 +177,37 @@ public class MainWindow {
 		button_9.setBounds(208, 187, 89, 23);
 		frame.getContentPane().add(button_9);
 
+		button_zZagrada = new JButton(")");
+		button_zZagrada.setEnabled(false);
+		button_zZagrada.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				txtEkran.setText(InternaLogika.procesirajUnos(')'));
+				button_oZagrada.setEnabled(false);
+				button_zZagrada.setEnabled(false);
+			}
+		});
+		button_zZagrada.setBounds(260, 153, 42, 23);
+		frame.getContentPane().add(button_zZagrada);
+		
+		button_oZagrada = new JButton("(");
+		button_oZagrada.setEnabled(false);
+		button_oZagrada.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				txtEkran.setText(InternaLogika.procesirajUnos('('));
+				button_zZagrada.setEnabled(true);
+			}
+		});
+		
+		
+		button_oZagrada.setBounds(208, 153, 42, 23);
+		frame.getContentPane().add(button_oZagrada);
+
+		
+		
 		JButton btnC = new JButton("C");
 		btnC.addActionListener(new ActionListener() 
 		{
@@ -272,6 +305,7 @@ public class MainWindow {
 			public void actionPerformed(ActionEvent e) 
 			{
 				txtEkran.setText(InternaLogika.procesirajUnos('+'));
+				button_oZagrada.setEnabled(true);
 			}
 		});
 		button_sab.setBounds(307, 255, 89, 23);
@@ -282,6 +316,7 @@ public class MainWindow {
 			public void actionPerformed(ActionEvent e) 
 			{
 				txtEkran.setText(InternaLogika.procesirajUnos('-'));
+				button_oZagrada.setEnabled(true);
 			}
 		});
 		button_min.setBounds(307, 221, 89, 23);
@@ -292,6 +327,7 @@ public class MainWindow {
 			public void actionPerformed(ActionEvent arg0) 
 			{
 				txtEkran.setText(InternaLogika.procesirajUnos('*'));
+				button_oZagrada.setEnabled(true);
 			}
 		});
 		button_put.setBounds(307, 187, 89, 23);
@@ -302,18 +338,13 @@ public class MainWindow {
 			public void actionPerformed(ActionEvent arg0) 
 			{
 				txtEkran.setText(InternaLogika.procesirajUnos('/'));
+				button_oZagrada.setEnabled(true);
 			}
 		});
 		button_pod.setBounds(307, 153, 89, 23);
 		frame.getContentPane().add(button_pod);
 
-		JButton button_oZagrada = new JButton("(");
-		button_oZagrada.setBounds(208, 153, 42, 23);
-		frame.getContentPane().add(button_oZagrada);
-
-		JButton button_zZagrada = new JButton(")");
-		button_zZagrada.setBounds(260, 153, 42, 23);
-		frame.getContentPane().add(button_zZagrada);
+		
 		
 		JButton btnNegPoz = new JButton("+/-");
 		btnNegPoz.addActionListener(new ActionListener() 

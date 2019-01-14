@@ -33,6 +33,7 @@ public class InternaLogika
 	static int broj;
 	static String brojOstatak = "";
 	static boolean imamoOstatak;
+	static boolean unutarZagrade;
 	static double zadnjiClan; 
 
 	public static String procesirajUnos(char unos)
@@ -62,6 +63,12 @@ public class InternaLogika
 		{
 			String izlaz = "0";
 
+			if (unos == '(')
+			{
+				unutarZagrade = true;
+				return String.valueOf(InternaLogika.unos.peek());
+			}
+			
 			if (unos == '.')
 			{
 				if (InternaLogika.unos.isEmpty())
@@ -111,9 +118,33 @@ public class InternaLogika
 					{
 						InternaLogika.mem += InternaLogika.unos.get(InternaLogika.unos.size() - 2);
 						return String.valueOf(InternaLogika.unos.size() - 2);
+					}		
+				} else if (unos == 'm')
+				{
+					if (InternaLogika.unos.peek() != 0)
+					{
+						InternaLogika.mem -= InternaLogika.unos.peek();
+						return String.valueOf(InternaLogika.unos.peek());
+					} else if (InternaLogika.unos.size() > 1)
+					{
+						InternaLogika.mem -= InternaLogika.unos.get(InternaLogika.unos.size() - 2);
+						return String.valueOf(InternaLogika.unos.size() - 2);
+					}		
+				} else if (unos == 'r')
+				{
+					InternaLogika.unos.pop();
+					InternaLogika.unos.push(mem);
+					izlaz = String.valueOf(mem);
+				} else if (unos == 'c')
+				{
+					mem = 0;
+					if (InternaLogika.unos.peek() == 0)
+					{
+						return String.valueOf(InternaLogika.unos.size() - 2);
+					} else
+					{
+						return String.valueOf(InternaLogika.unos.peek());
 					}
-					System.out.println(mem);
-					
 				} else
 				{
 					InternaLogika.zadnjiClan = 0;
@@ -131,15 +162,29 @@ public class InternaLogika
 						{
 							indeksOperacije = operacije.size() - 1;
 						}
-						InternaLogika.izvrsiOperaciju(InternaLogika.operacije.get(indeksOperacije));
-						InternaLogika.operacije.remove(indeksOperacije);
+						
+						if (!unutarZagrade)
+						{
+							InternaLogika.izvrsiOperaciju(InternaLogika.operacije.get(indeksOperacije));
+							InternaLogika.operacije.remove(indeksOperacije);
+						} 
+						
+						if (operacije.size() >= 3)
+						{
+							String op = operacije.pop();
+							while (operacije.size() > 0)
+							{
+								InternaLogika.izvrsiOperaciju(InternaLogika.operacije.pop());
+							}
+							operacije.push(op);
+						}
+						
 						izlaz = String.valueOf(InternaLogika.unos.peek());
 					}
-			
+					
 				}
 				InternaLogika.unos.push((double)0);
 			}
-			
 			return ukloniNule(izlaz);
 		}
 	}
@@ -190,6 +235,7 @@ public class InternaLogika
 			{
 				InternaLogika.unos.clear(); 
 				InternaLogika.operacije.clear();
+				mem = 0;
 			} else
 			{
 				InternaLogika.unos.pop(); 
