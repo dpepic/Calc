@@ -198,18 +198,46 @@ public class MainWindow {
 		frame.getContentPane().add(btnCe);
 
 		JButton btnMc = new JButton("MC");
+		btnMc.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				txtEkran.setText(InternaLogika.procesirajUnos('c'));
+			}
+		});
 		btnMc.setBounds(208, 72, 89, 23);
 		frame.getContentPane().add(btnMc);
 
 		JButton btnM = new JButton("M+");
+		btnM.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				txtEkran.setText(InternaLogika.procesirajUnos('p'));
+			}
+		});
 		btnM.setBounds(10, 106, 89, 23);
 		frame.getContentPane().add(btnM);
 
 		JButton btnMm = new JButton("M-");
+		btnMm.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				txtEkran.setText(InternaLogika.procesirajUnos('m'));
+			}
+		});
 		btnMm.setBounds(109, 106, 89, 23);
 		frame.getContentPane().add(btnMm);
 
 		JButton btnMr = new JButton("MR");
+		btnMr.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				txtEkran.setText(InternaLogika.procesirajUnos('r'));
+			}
+		});
 		btnMr.setBounds(208, 106, 89, 23);
 		frame.getContentPane().add(btnMr);
 
@@ -288,6 +316,13 @@ public class MainWindow {
 		frame.getContentPane().add(button_zZagrada);
 		
 		JButton btnNegPoz = new JButton("+/-");
+		btnNegPoz.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				txtEkran.setText(InternaLogika.procesirajUnos('a'));
+			}
+		});
 		btnNegPoz.setBounds(109, 153, 89, 23);
 		frame.getContentPane().add(btnNegPoz);
 	}

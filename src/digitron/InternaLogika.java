@@ -29,6 +29,7 @@ public class InternaLogika
 {
 	static Stack<Double> unos = new Stack<Double>();
 	static Stack<String> operacije = new Stack<String>();
+	static double mem; 
 	static int broj;
 	static String brojOstatak = "";
 	static boolean imamoOstatak;
@@ -42,13 +43,16 @@ public class InternaLogika
 
 			if (imamoOstatak)
 			{ 
-				brojOstatak += String.valueOf(broj);
+				if (brojOstatak.length() < 5)
+				{
+					brojOstatak += String.valueOf(broj);
+				}
 			} else
 			{
 				if (InternaLogika.unos.isEmpty()) 
 				{
 					InternaLogika.unos.push((double)broj);
-				} else
+				} else if (InternaLogika.unos.peek() < 100000)
 				{	
 					InternaLogika.unos.push(InternaLogika.unos.pop() * 10 + broj);
 				}
@@ -75,6 +79,7 @@ public class InternaLogika
 				} 
 				brojOstatak = "";
 			}
+			
 			if (!InternaLogika.unos.isEmpty())
 			{
 				if (unos == '=')
@@ -92,7 +97,24 @@ public class InternaLogika
 						izlaz = String.valueOf(InternaLogika.unos.peek());
 						
 					}
-				}else
+				}else if (unos == 'a') //ovo nam je za +/-
+				{
+					InternaLogika.unos.push(InternaLogika.unos.pop() * -1);
+					return String.valueOf(InternaLogika.unos.peek());
+				} else if (unos == 'p')
+				{
+					if (InternaLogika.unos.peek() != 0)
+					{
+						InternaLogika.mem += InternaLogika.unos.peek();
+						return String.valueOf(InternaLogika.unos.peek());
+					} else if (InternaLogika.unos.size() > 1)
+					{
+						InternaLogika.mem += InternaLogika.unos.get(InternaLogika.unos.size() - 2);
+						return String.valueOf(InternaLogika.unos.size() - 2);
+					}
+					System.out.println(mem);
+					
+				} else
 				{
 					InternaLogika.zadnjiClan = 0;
 					InternaLogika.operacije.push(String.valueOf(unos));
